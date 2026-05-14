@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browser Wars 2026 , Clockspeed</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #f5f0e8;
+    --accent: #c8401a;
+    --accent2: #1a5fc8;
+    --rule: #d4cfc6;
+    --muted: #7a7570;
+    --highlight: #fdf3dc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  /* Newspaper texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f5f0e8'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23e8e3db' opacity='0.4'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* Masthead */
+  .masthead {
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 12px 0;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .masthead .pub { color: var(--ink); font-weight: 500; }
+
+  /* Headline block */
+  .headline-block {
+    border-bottom: 1px solid var(--rule);
+    padding: 36px 0 28px;
+    margin-bottom: 32px;
+  }
+
+  .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 6vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .deck {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: #3a3632;
+    line-height: 1.6;
+    max-width: 640px;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+  }
+
+  /* Author bar */
+  .author-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 40px;
+  }
+
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  .author-info { flex: 1; }
+  .author-name { font-weight: 500; font-size: 0.9rem; }
+  .author-meta { font-size: 0.8rem; color: var(--muted); }
+
+  .read-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: var(--rule);
+    padding: 4px 10px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* Body */
+  .intro {
+    font-size: 1.08rem;
+    font-weight: 400;
+    line-height: 1.85;
+    margin-bottom: 48px;
+    color: #2a2724;
+  }
+
+  .intro::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5em;
+    font-weight: 900;
+    float: left;
+    line-height: 0.8;
+    margin: 8px 12px -4px 0;
+    color: var(--accent);
+  }
+
+  /* Section headers */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  p { margin-bottom: 18px; }
+
+  /* Browser cards */
+  .browser-grid {
+    display: grid;
+    gap: 0;
+    margin: 40px 0 48px;
+    border: 1px solid var(--ink);
+  }
+
+  .browser-card {
+    padding: 28px 28px 24px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .browser-card:last-child { border-bottom: none; }
+  .browser-card:hover { background: var(--highlight); }
+
+  .browser-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .browser-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    border: 1px solid var(--rule);
+  }
+
+  .browser-title-block { flex: 1; }
+
+  .browser-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .browser-tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .score-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .score-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pill-good { background: #d4edda; color: #1a5c2a; border: 1px solid #a3d5af; }
+  .pill-ok   { background: #fff3cd; color: #664d00; border: 1px solid #ffc107; }
+  .pill-bad  { background: #fce8e8; color: #8b1a1a; border: 1px solid #f5a5a5; }
+
+  .browser-body { font-size: 0.95rem; line-height: 1.75; color: #2e2b28; }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .pros, .cons {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+    border-radius: 2px;
+  }
+
+  .pros-label, .cons-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .pros-label { color: #1a5c2a; }
+  .cons-label { color: #8b1a1a; }
+
+  .pros ul, .cons ul {
+    list-style: none;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #3a3632;
+  }
+
+  .pros ul li::before { content: '✓ '; color: #1a5c2a; font-weight: 500; }
+  .cons ul li::before { content: '✗ '; color: #8b1a1a; font-weight: 500; }
+
+  /* Comparison table */
+  .comparison-section {
+    margin: 48px 0;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin-top: 20px;
+  }
+
+  .compare-table thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .compare-table thead th:first-child { width: 160px; }
+
+  .compare-table tbody tr:nth-child(even) { background: rgba(0,0,0,0.03); }
+
+  .compare-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: middle;
+  }
+
+  .compare-table tbody td:first-child {
+    font-weight: 500;
+    font-size: 0.83rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  .dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .dot-g { background: #3a9e5f; }
+  .dot-y { background: #d4a017; }
+  .dot-r { background: #c8401a; }
+
+  /* Pull quote */
+  .pull-quote {
+    margin: 48px 0;
+    padding: 28px 36px;
+    border-left: 5px solid var(--accent);
+    border-right: 5px solid var(--accent);
+    text-align: center;
+    background: white;
+  }
+
+  .pull-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.55rem;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .pull-quote cite {
+    display: block;
+    margin-top: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    font-style: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Verdict */
+  .verdict-section {
+    margin: 48px 0;
+  }
+
+  .verdict-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .verdict-card {
+    border: 1px solid var(--ink);
+    padding: 20px;
+    background: white;
+  }
+
+  .verdict-use-case {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .verdict-pick {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .verdict-reason { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+  /* Footer */
+  .article-footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
+  .footer-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cta {
+    font-size: 0.85rem;
+    color: var(--accent2);
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--accent2);
+    padding: 8px 18px;
+    border-radius: 2px;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .cta:hover { background: var(--accent2); color: white; }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 40px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    color: var(--rule);
+    font-size: 1.5rem;
+    margin: 32px 0;
+    letter-spacing: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .pros-cons { grid-template-columns: 1fr; }
+    .masthead { flex-direction: column; gap: 4px; text-align: center; }
+    .browser-header { flex-wrap: wrap; }
+    .score-bar { margin-left: 0; }
+    h1 { font-size: 2.2rem; }
+  }
+
+  @media print {
+    @page {
+      size: 412px 915px;
+      margin: 10mm 6mm 10mm 6mm;
+    }
+
+    body {
+      background: #f5f0e8 !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      font-size: 9pt;
+      line-height: 1.65;
+    }
+
+    body::before { display: none; }
+
+    .page {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    /* Prevent awkward mid-element breaks */
+    .browser-card,
+    .verdict-card,
+    .pull-quote,
+    .pros-cons,
+    .author-bar,
+    .verdict-section {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Each browser card starts on its own page — clean swipe feel */
+    .browser-card {
+      break-before: page;
+      page-break-before: always;
+      padding: 16px 14px;
+    }
+
+    .browser-card:first-child {
+      break-before: auto;
+      page-break-before: auto;
+    }
+
+    h1, h2 { break-after: avoid; page-break-after: avoid; }
+    .section-label { break-after: avoid; }
+
+    /* Table: each on its own page */
+    .comparison-section {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    .compare-table {
+      font-size: 7.5pt;
+      width: 100%;
+    }
+
+    .compare-table thead th,
+    .compare-table tbody td {
+      padding: 6px 7px;
+    }
+
+    /* Verdict cards stack vertically */
+    .verdict-cards {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .verdict-section {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    /* Hide share button */
+    .cta { display: none; }
+
+    /* Force background colors */
+    .masthead,
+    .pros, .cons,
+    .verdict-card,
+    .pull-quote,
+    .compare-table thead,
+    .score-pill,
+    .pill-good, .pill-ok, .pill-bad,
+    .browser-grid {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Tighter type scale */
+    h1 { font-size: 1.9rem; }
+    h2 { font-size: 1.25rem; }
+    .deck { font-size: 0.95rem; }
+    .intro { font-size: 0.92rem; margin-bottom: 24px; }
+    .browser-name { font-size: 1.1rem; }
+    .pull-quote blockquote { font-size: 1.1rem; }
+
+    /* Score pills wrap nicely on narrow width */
+    .score-bar {
+      flex-wrap: wrap;
+      margin-left: 0;
+      margin-top: 8px;
+    }
+
+    .browser-header { flex-wrap: wrap; }
+
+    /* Pros/cons stack on narrow */
+    .pros-cons { grid-template-columns: 1fr; gap: 8px; }
+
+    .headline-block { padding: 18px 0 14px; }
+    .masthead { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Masthead -->
+  <div class="masthead">
+    <span class="pub">Clockspeed</span>
+    <span>Article | May 2026</span>
+    <span>SANDYQED</span>
+  </div>
+
+  <!-- Headline -->
+  <div class="headline-block">
+    <div class="kicker">Browser Wars · 2026 Edition</div>
+    <h1>Five Browsers.<br><em>One Internet.</em><br>Which Wins?</h1>
+    <p class="deck">Chrome, Brave, Edge, Firefox, and Tor each promise to be your best window to the web , but they make radically different bets about what you actually need. Here's the unvarnished truth about all five.</p>
+  </div>
+
+  <!-- Author -->
+  <div class="author-bar">
+    <div class="avatar">S</div>
+    <div class="author-info">
+      <div class="author-name">Technology & Digital Strategy</div>
+      <div class="author-meta">Published on LinkedIn · 12 min read</div>
+    </div>
+    <span class="read-time">⏱ 12 min</span>
+  </div>
+
+  <p class="intro">
+    Most people pick a browser on day one of a new laptop and never revisit that decision. I was exactly that person until a few years back, when a particularly bad Chrome memory leak ate through my 16GB RAM mid-presentation. That one incident sent me down a rabbit hole I haven't fully climbed out of since. Turns out, your browser is doing a lot more , and leaking a lot more , than you probably realise.
+  </p>
+
+  <p>So I spent the better part of the last month actually switching between all five of these, doing my actual work in each one. Not benchmarks in a lab , real tabs, real workflows, real frustrations. Here's what I found, without the usual "well it depends" hedging you get from most tech publications.</p>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- Browser deep dives -->
+  <div class="section-label">In-Depth Analysis</div>
+  <h2>The Contenders, One by One</h2>
+
+  <div class="browser-grid">
+
+    <!-- Chrome -->
+    <div class="browser-card">
+      <div class="browser-header">
+        <div class="browser-icon" style="background:#fef8f0;">🌐</div>
+        <div class="browser-title-block">
+          <div class="browser-name">Google Chrome</div>
+          <div class="browser-tagline">The Market Incumbent · ~65% Global Share</div>
+        </div>
+        <div class="score-bar">
+          <span class="score-pill pill-good">Speed ✓</span>
+          <span class="score-pill pill-good">Compat ✓</span>
+          <span class="score-pill pill-bad">Privacy ✗</span>
+          <span class="score-pill pill-bad">RAM ✗</span>
+        </div>
+      </div>
+      <div class="browser-body">
+        <p>Look, Chrome is dominant for a reason. Everything just works , your company's internal tools, the SaaS subscriptions, the random government portal you have to use once a quarter. When you're deep in a Google Workspace setup, switching away has real friction costs. I get it. I've lived it.</p>
+        <p>But here's what I can't get past: Chrome is effectively spyware that you've agreed to through a 47-page terms document nobody reads. Every tab, every search, every idle second feeds Google's ad profile on you. The RAM situation is also genuinely bad , I had 14 tabs open and Task Manager showed Chrome eating 2.1 GB. That's not a browser, that's a lifestyle tax.</p>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Strengths</div>
+          <ul>
+            <li>Widest extension library</li>
+            <li>Best Google Workspace sync</li>
+            <li>Fastest JS benchmarks</li>
+            <li>Universal site compatibility</li>
+            <li>Regular security updates</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Weaknesses</div>
+          <ul>
+            <li>Heavy RAM usage</li>
+            <li>Deep data collection by Google</li>
+            <li>Aggressive sync tracking</li>
+            <li>Battery drain on laptops</li>
+            <li>Closed development model</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Brave -->
+    <div class="browser-card">
+      <div class="browser-header">
+        <div class="browser-icon" style="background:#fff5f0;">🦁</div>
+        <div class="browser-title-block">
+          <div class="browser-name">Brave</div>
+          <div class="browser-tagline">The Privacy Disruptor · Chromium-Based</div>
+        </div>
+        <div class="score-bar">
+          <span class="score-pill pill-good">Privacy ✓</span>
+          <span class="score-pill pill-good">Speed ✓</span>
+          <span class="score-pill pill-ok">Ads ±</span>
+          <span class="score-pill pill-ok">Trust ±</span>
+        </div>
+      </div>
+      <div class="browser-body">
+        <p>Brave was my biggest surprise. I'd written it off as a browser for crypto bros, but strip away the BAT token stuff and what's left is genuinely excellent , same Chrome extensions, noticeably snappier page loads (because it's not downloading three ad networks before the actual content), and default tracker blocking that would take you 20 minutes of extension-hunting to replicate in Chrome.</p>
+        <p>The crypto angle is weird, I won't pretend otherwise. Brave wants to pay you in tokens for viewing their ads. You can completely ignore this , I did , and the browser still delivers. My main gripe is that occasionally it'll break a website because it's blocked something too aggressively. Happened to me twice with banking portals. Easy to whitelist, but mildly annoying.</p>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Strengths</div>
+          <ul>
+            <li>Aggressive tracker blocking</li>
+            <li>Chrome extension compatible</li>
+            <li>Noticeably faster page loads</li>
+            <li>Built-in Tor private window</li>
+            <li>Lower RAM than Chrome</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Weaknesses</div>
+          <ul>
+            <li>Crypto/BAT model feels gimmicky</li>
+            <li>Occasional site breakage</li>
+            <li>Smaller user community</li>
+            <li>CEO history (2014 controversy)</li>
+            <li>Some defaults feel opinionated</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edge -->
+    <div class="browser-card">
+      <div class="browser-header">
+        <div class="browser-icon" style="background:#f0f5ff;">🔷</div>
+        <div class="browser-title-block">
+          <div class="browser-name">Microsoft Edge</div>
+          <div class="browser-tagline">The Enterprise Contender · Chromium-Based</div>
+        </div>
+        <div class="score-bar">
+          <span class="score-pill pill-good">Enterprise ✓</span>
+          <span class="score-pill pill-good">M365 Sync ✓</span>
+          <span class="score-pill pill-ok">Privacy ±</span>
+          <span class="score-pill pill-bad">Bloat ✗</span>
+        </div>
+      </div>
+      <div class="browser-body">
+        <p>Nobody expected Microsoft to pull this off. The old Edge was a punchline. The new one, rebuilt on Chromium in 2020, is legitimately good , and if your work life runs on Teams, SharePoint, and OneDrive, it's probably the smartest choice you're not making. The PDF reader alone is better than most paid alternatives. Vertical tabs changed how I organise research sessions.</p>
+        <p>Where it falls apart: Microsoft cannot help itself. The browser ships with a news feed, shopping suggestions, a sidebar trying to sell you things, and Copilot hovering at the edge of every page. It feels like a browser that doesn't fully trust you to just browse. On a managed corporate device with IT policies applied, this bloat mostly disappears. On a personal machine, you'll spend 20 minutes in settings undoing what Microsoft assumed you wanted.</p>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Strengths</div>
+          <ul>
+            <li>Outstanding M365 integration</li>
+            <li>Best vertical tabs UI</li>
+            <li>Excellent PDF reader built-in</li>
+            <li>Strong enterprise policy support</li>
+            <li>Copilot AI sidebar</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Weaknesses</div>
+          <ul>
+            <li>Heavy telemetry by default</li>
+            <li>Bloatware: news, shopping, etc.</li>
+            <li>Pushed aggressively on Windows</li>
+            <li>Copilot can feel intrusive</li>
+            <li>Privacy requires active effort</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firefox -->
+    <div class="browser-card">
+      <div class="browser-header">
+        <div class="browser-icon" style="background:#fff8f0;">🦊</div>
+        <div class="browser-title-block">
+          <div class="browser-name">Firefox</div>
+          <div class="browser-tagline">The Open Web Guardian · Independent Gecko Engine</div>
+        </div>
+        <div class="score-bar">
+          <span class="score-pill pill-good">Privacy ✓</span>
+          <span class="score-pill pill-good">Open Source ✓</span>
+          <span class="score-pill pill-ok">Speed ±</span>
+          <span class="score-pill pill-bad">Market Share ✗</span>
+        </div>
+      </div>
+      <div class="browser-body">
+        <p>Firefox is the browser I want to use more than I actually do, which tells you something honest about the tradeoffs. It's fast enough, privacy-first, deeply customisable, and the only browser in this list not running on Google's Chromium engine , which matters more than it sounds. If Chrome becomes the only engine that matters, Google effectively controls what the web can and can't do. Firefox being alive keeps that in check.</p>
+        <p>The practical friction: a handful of sites behave slightly oddly, extensions are fewer (though uBlock Origin works perfectly here), and Mozilla's funding situation , heavily dependent on Google paying to be the default search engine , is an awkward irony for a browser selling itself on independence. None of this stops me recommending it. Developers in particular tend to love it once they try it.</p>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Strengths</div>
+          <ul>
+            <li>Non-Chromium independence</li>
+            <li>Enhanced Tracking Protection</li>
+            <li>Deep customisation via CSS</li>
+            <li>Non-profit, mission-driven</li>
+            <li>Strong developer tools</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Weaknesses</div>
+          <ul>
+            <li>Smaller extension ecosystem</li>
+            <li>Some sites optimise for Chrome only</li>
+            <li>Mozilla's Google funding paradox</li>
+            <li>Declining market share</li>
+            <li>Slower on some benchmarks</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tor -->
+    <div class="browser-card">
+      <div class="browser-header">
+        <div class="browser-icon" style="background:#f5f0ff;">🧅</div>
+        <div class="browser-title-block">
+          <div class="browser-name">Tor Browser</div>
+          <div class="browser-tagline">The Anonymity Layer · Firefox-Based + Onion Routing</div>
+        </div>
+        <div class="score-bar">
+          <span class="score-pill pill-good">Anonymity ✓</span>
+          <span class="score-pill pill-good">Journalism ✓</span>
+          <span class="score-pill pill-bad">Speed ✗</span>
+          <span class="score-pill pill-bad">Everyday Use ✗</span>
+        </div>
+      </div>
+      <div class="browser-body">
+        <p>Tor is the one browser on this list I'd describe as genuinely inconvenient , and that's entirely the point. It bounces your traffic through three separate relays before it reaches any website, which means your ISP can't see what you're doing, the website can't trace it back to you, and even Tor's own infrastructure can't connect the dots. That's not marketing. That's the actual architecture.</p>
+        <p>I used it for a week of research on a sensitive topic and it worked , slowly, sometimes frustratingly so, with a few sites outright refusing to load because they block Tor exit nodes. Streaming is off the table. Don't even try. The golden rule with Tor: the moment you log into any personal account, you've broken your own anonymity. It's a specialist tool. Use it for specialist situations and don't expect it to replace your daily browser.</p>
+      </div>
+      <div class="pros-cons">
+        <div class="pros">
+          <div class="pros-label">Strengths</div>
+          <ul>
+            <li>Strongest anonymity available</li>
+            <li>.onion site access</li>
+            <li>ISP traffic concealment</li>
+            <li>Bypass censorship effectively</li>
+            <li>Free and open source</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <div class="cons-label">Weaknesses</div>
+          <ul>
+            <li>Very slow connection speeds</li>
+            <li>Many sites block Tor IPs</li>
+            <li>No streaming support</li>
+            <li>User error breaks anonymity</li>
+            <li>Not suitable for daily work</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Pull quote -->
+  <div class="pull-quote">
+    <blockquote>"I had 14 tabs open and Chrome was eating 2.1 GB. That's not a browser, that's a lifestyle tax."</blockquote>
+    <cite>From testing notes , Clockspeed / SANDYQED</cite>
+  </div>
+
+  <!-- Comparison table -->
+  <div class="comparison-section">
+    <div class="section-label">Side-by-Side</div>
+    <h2>How They Stack Up</h2>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Chrome</th>
+          <th>Brave</th>
+          <th>Edge</th>
+          <th>Firefox</th>
+          <th>Tor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Engine</td>
+          <td>Blink (Google)</td>
+          <td>Blink (Chromium)</td>
+          <td>Blink (Chromium)</td>
+          <td>Gecko (Mozilla)</td>
+          <td>Gecko (Mozilla)</td>
+        </tr>
+        <tr>
+          <td>Default Privacy</td>
+          <td><span class="dot dot-r"></span>Minimal</td>
+          <td><span class="dot dot-g"></span>Strong</td>
+          <td><span class="dot dot-y"></span>Moderate</td>
+          <td><span class="dot dot-g"></span>Strong</td>
+          <td><span class="dot dot-g"></span>Maximum</td>
+        </tr>
+        <tr>
+          <td>Speed (typical)</td>
+          <td><span class="dot dot-g"></span>Fastest</td>
+          <td><span class="dot dot-g"></span>Very Fast</td>
+          <td><span class="dot dot-g"></span>Fast</td>
+          <td><span class="dot dot-y"></span>Fast</td>
+          <td><span class="dot dot-r"></span>Slow</td>
+        </tr>
+        <tr>
+          <td>RAM Usage</td>
+          <td><span class="dot dot-r"></span>Heavy</td>
+          <td><span class="dot dot-y"></span>Moderate</td>
+          <td><span class="dot dot-y"></span>Moderate</td>
+          <td><span class="dot dot-g"></span>Efficient</td>
+          <td><span class="dot dot-g"></span>Light</td>
+        </tr>
+        <tr>
+          <td>Extension Library</td>
+          <td><span class="dot dot-g"></span>Largest</td>
+          <td><span class="dot dot-g"></span>Chrome-compat</td>
+          <td><span class="dot dot-g"></span>Chrome-compat</td>
+          <td><span class="dot dot-y"></span>Good</td>
+          <td><span class="dot dot-r"></span>Minimal</td>
+        </tr>
+        <tr>
+          <td>Enterprise Fit</td>
+          <td><span class="dot dot-g"></span>Excellent</td>
+          <td><span class="dot dot-y"></span>Moderate</td>
+          <td><span class="dot dot-g"></span>Excellent</td>
+          <td><span class="dot dot-y"></span>Good</td>
+          <td><span class="dot dot-r"></span>Not suitable</td>
+        </tr>
+        <tr>
+          <td>Open Source</td>
+          <td><span class="dot dot-r"></span>Partial</td>
+          <td><span class="dot dot-g"></span>Yes</td>
+          <td><span class="dot dot-r"></span>Partial</td>
+          <td><span class="dot dot-g"></span>Yes</td>
+          <td><span class="dot dot-g"></span>Yes</td>
+        </tr>
+        <tr>
+          <td>Anonymity Level</td>
+          <td><span class="dot dot-r"></span>None</td>
+          <td><span class="dot dot-y"></span>Good</td>
+          <td><span class="dot dot-r"></span>Minimal</td>
+          <td><span class="dot dot-y"></span>Good</td>
+          <td><span class="dot dot-g"></span>Maximum</td>
+        </tr>
+        <tr>
+          <td>AI / Copilot Built-in</td>
+          <td><span class="dot dot-y"></span>Gemini (lite)</td>
+          <td><span class="dot dot-r"></span>No</td>
+          <td><span class="dot dot-g"></span>Copilot full</td>
+          <td><span class="dot dot-r"></span>No</td>
+          <td><span class="dot dot-r"></span>No</td>
+        </tr>
+        <tr>
+          <td>Best For</td>
+          <td>Google stack</td>
+          <td>Privacy + speed</td>
+          <td>Microsoft stack</td>
+          <td>Open web + devs</td>
+          <td>Sensitive work</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Verdict -->
+  <div class="verdict-section">
+    <div class="section-label">The Bottom Line</div>
+    <h2>Which Browser Should You Choose?</h2>
+    <p>Honestly, the "right" browser is whichever one doesn't get in your way. But if you want my actual opinion after using all five back-to-back:</p>
+
+    <div class="verdict-cards">
+      <div class="verdict-card">
+        <div class="verdict-use-case">Google Workspace user</div>
+        <div class="verdict-pick">Chrome</div>
+        <div class="verdict-reason">The integrations are too tight to give up. Harden with uBlock Origin and consider a VPN.</div>
+      </div>
+      <div class="verdict-card">
+        <div class="verdict-use-case">Privacy-first professional</div>
+        <div class="verdict-pick">Brave</div>
+        <div class="verdict-reason">All of Chrome's compatibility with meaningful default privacy. Ignore the crypto stuff.</div>
+      </div>
+      <div class="verdict-card">
+        <div class="verdict-use-case">Microsoft 365 / corporate</div>
+        <div class="verdict-pick">Edge</div>
+        <div class="verdict-reason">SharePoint, Teams, and OneDrive just work better here. Use group policy to strip the bloat.</div>
+      </div>
+      <div class="verdict-card">
+        <div class="verdict-use-case">Developer / power user</div>
+        <div class="verdict-pick">Firefox</div>
+        <div class="verdict-reason">Best dev tools, true independence from Chromium monoculture. Worth it on principle too.</div>
+      </div>
+      <div class="verdict-card">
+        <div class="verdict-use-case">Research / journalism</div>
+        <div class="verdict-pick">Tor + Brave</div>
+        <div class="verdict-reason">Tor for sensitive sessions, Brave for daily. Never mix authenticated and anonymous sessions.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">· · ·</div>
+
+  <p>One thing I'd push back on: the idea that you have to pick just one. My current setup is Firefox for anything work-related, and Edge for everything else. Took me ten minutes to configure. The separation means my work identity and my personal browsing stay cleanly apart , which matters more than people realise once you've thought about it.</p>
+
+  <p>Anyway , if you've been on Chrome by default since 2013 and never questioned it, maybe give one of the others a two-week shot. Worst case you switch back. Best case you find something that fits your actual life better.</p>
+
+  <!-- Footer -->
+  <div class="article-footer">
+    <div class="footer-tags">
+      <span class="tag">Technology</span>
+      <span class="tag">Cybersecurity</span>
+      <span class="tag">Productivity</span>
+      <span class="tag">Privacy</span>
+      <span class="tag">Digital Tools</span>
+    </div>
+    <a class="cta" href="#">↑ Share Article</a>
+  </div>
+
+</div>
+</body>
+</html>
